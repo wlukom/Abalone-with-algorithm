@@ -2,6 +2,6 @@
 
 This is an implementation Abalone game for two players.
 
-language: c++
+Language: c++, QML<br>
 IDE: Qt Creator
 
