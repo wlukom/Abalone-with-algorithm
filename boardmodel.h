@@ -17,6 +17,7 @@ class Field
     int player;
     int arrow;
     Field();
+    Field(int id, int player = 0): id(id), player(player) {  };
     Field(int id, double width, double height, double x, double y, int player = 0, int arrow = -1):id(id), width(width), height(height), x(x), y(y), player(player), arrow(arrow){};
 };
 struct fieldDirections
@@ -80,6 +81,8 @@ class BoardModel : public QAbstractListModel
    void changePlayer();
    void resetArrows();
    void setStartPosition();
+
+   void computerMovement();
 
    QMap<int, fieldDirections> partDirections;
    QMap<int, pair<int,int>> directionsFromCorners;

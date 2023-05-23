@@ -1,14 +1,15 @@
 import QtQuick 2.15
 import QtQuick.Window 2.15
 
+
 Window {
     width: 640
     height: 640
     visible: true
     title: qsTr("Abalone")
     color: "teal"
-    onWidthChanged: BoardModel.updateSizeBoard(boardWindow.width, boardWindow.height)
-    onHeightChanged: BoardModel.updateSizeBoard(boardWindow.width, boardWindow.height)
+//    onWidthChanged: BoardModel.updateSizeBoard(boardWindow.width, boardWindow.height)
+//    onHeightChanged: BoardModel.updateSizeBoard(boardWindow.width, boardWindow.height)
 
     Rectangle{
         id: menu
@@ -131,7 +132,7 @@ Window {
                 font.pointSize: height ? height * 0.7 : 1
             }
         }
-}
+    }
     Rectangle{
         id: boardWindow
         anchors.bottom: parent.bottom
@@ -178,20 +179,21 @@ Window {
                     font.pointSize: parent.height ? parent.height*0.5 : 20
                  }
             }
-        Text{
-            id: playAgain
-            anchors.centerIn: parent
-            topPadding: whoWin.height
-            text:  "PLAY AGAIN"
-            style: Text.Outline
-            styleColor: "#CC3333"
-            font.weight: Font.Bold
-            font.pointSize: whoWin.height ? whoWin.height*0.3 : 10
-            MouseArea{
-                anchors.fill: parent
-                onClicked: BoardModel.draw(boardWindow.width, boardWindow.height)
+            Text{
+                id: playAgain
+                anchors.centerIn: parent
+                topPadding: whoWin.height
+                text:  "PLAY AGAIN"
+                style: Text.Outline
+                styleColor: "#CC3333"
+                font.weight: Font.Bold
+                font.pointSize: whoWin.height ? whoWin.height*0.3 : 10
+                MouseArea{
+                    anchors.fill: parent
+                    onClicked: BoardModel.draw(boardWindow.width, boardWindow.height)
+                }
             }
-        }
         }
     }
 }
+

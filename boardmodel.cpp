@@ -1,4 +1,5 @@
 #include "boardmodel.h"
+#include "algorithm.cpp"
 
 #include <cstdlib>
 #include <string>
@@ -117,6 +118,16 @@ void BoardModel::movement(double x, double y, int box){
         isStartGame = true;
         emit checkIsStartGame();
     }
+
+    computerMovement();
+}
+void BoardModel::computerMovement(){
+
+//    cout << "XDD" << endl;
+    Board b = Board(datas);
+    Algorithm a = Algorithm(b.fields, 2);
+    a.getTheBestMovement();
+
 }
 
 void BoardModel::predictMovement(int fieldID, double x, double y, int box){
