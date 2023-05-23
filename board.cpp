@@ -97,6 +97,7 @@ class Board{
 
         float rate(int player){
 
+
             float score = 5;
 
             // NUMBER OF MARBLES
@@ -109,15 +110,17 @@ class Board{
 
             // DISTANCE FROM THE CENTER
             int d = summary_distance_from_center(player);
+            //int od = summary_distance_from_center(oppositePlayer(player));
 
+            //score += od * 0.01;
             score -= d * 0.01;
             // cout << "\t DISTANCE=" << d << endl;
             // cout << "\tAFTER DISTANCE=" << score << endl;
 
             // // GROUPING
-            int grouping = marbles_neighborhood_rate(player);
+            //int grouping = marbles_neighborhood_rate(player);
             //cout << "\t GROUPING=" << grouping * 0.005 << endl;
-            score += grouping * 0.005;
+            //score += grouping * 0.005;
 
             // Attacking by group
 

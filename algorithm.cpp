@@ -24,20 +24,18 @@ class Algorithm{
 
         }
         array<int, 2> getTheBestMovement(){
-            cout << "XD" << endl;
 
             array<int, 2> the_best_movement;
 
-            cout << "YYYYY" << endl;
+
 
             alfabeta(root_node, initial_board, -10, 20);
 
-            cout << "LOL" << endl;
 
-            //QSharedPointer<Movement> m = choosingTheBestMovement(root_node);
+            QSharedPointer<Movement> m = choosingTheBestMovement(root_node);
 
-//            the_best_movement[0] = m->getFieldId();
-//            the_best_movement[1] = m->getDirection();
+            the_best_movement[0] = m->getFieldId();
+            the_best_movement[1] = m->getDirection();
 
 //            m->print();
 //            initial_board.updateMovement(m);
@@ -101,11 +99,11 @@ class Algorithm{
             }
             srand ( time(NULL) );
             int rand_number = rand() % good_movements.size();
-//            cout << "ilosc dobrych ruchow=" << good_movements.size() << endl;
-//            for(QSharedPointer<Movement> m : good_movements){
-//                m->print();
-//            }
-//            cout << "Koneic" << endl;
+            cout << "ilosc dobrych ruchow=" << good_movements.size() << endl;
+            for(QSharedPointer<Movement> m : good_movements){
+                m->print();
+            }
+            cout << "Koneic" << endl;
 
             return *(next(good_movements.begin(), rand_number));
         }

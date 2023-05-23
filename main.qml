@@ -8,8 +8,8 @@ Window {
     visible: true
     title: qsTr("Abalone")
     color: "teal"
-//    onWidthChanged: BoardModel.updateSizeBoard(boardWindow.width, boardWindow.height)
-//    onHeightChanged: BoardModel.updateSizeBoard(boardWindow.width, boardWindow.height)
+    onWidthChanged: BoardModel.updateSizeBoard(boardWindow.width, boardWindow.height)
+    onHeightChanged: BoardModel.updateSizeBoard(boardWindow.width, boardWindow.height)
 
     Rectangle{
         id: menu
@@ -108,6 +108,28 @@ Window {
                 styleColor: "white"
                 font.weight: Font.Bold
             }
+            Timer {
+                id: timer
+                function setTimeout(cb, delayTime) {
+                    timer.interval = delayTime;
+                    timer.repeat = false;
+                    timer.triggered.connect(cb);
+                    timer.triggered.connect(function release () {
+                        timer.triggered.disconnect(cb); // This is important
+                        timer.triggered.disconnect(release); // This is important as well
+                    });
+                    timer.start();
+                }
+            }
+            Connections {
+                target: BoardModel
+                function onPlayerChanged()
+             {
+                     if(BoardModel.player === 2){
+                         timer.setTimeout(function(){ BoardModel.computerMovement(); }, 1);
+                     }
+             }
+            }
             Text{
                 anchors.bottom: name2.top
                 height: parent.height * 0.3
@@ -118,6 +140,7 @@ Window {
                 styleColor: "black"
                 font.weight: Font.ExtraBold
                 font.pointSize: height ? height * 0.4 : 1
+
             }
             Text{
                 anchors.top: name2.bottom

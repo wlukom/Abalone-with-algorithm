@@ -8,6 +8,7 @@
 #include <cmath>
 #include <bits/stdc++.h>
 #include <map>
+#include <QThread>
 
 using namespace std;
 
@@ -50,6 +51,9 @@ void BoardModel::draw(double width, double height){
     endResetModel();
 }
 void BoardModel::updateSizeBoard(double width, double height){
+    if(datas.empty()){
+        return;
+    }
 
     QList<QSharedPointer<Field>> pomDatas = datas;
     if(height < width){
@@ -60,25 +64,27 @@ void BoardModel::updateSizeBoard(double width, double height){
         rectangleWidth = width/(columns+1);
         rectangleHeight = 0.5*rectangleWidth*sqrt(3);
     }
-        beginResetModel();
-        datas.clear();
-        for(int row = 0; row < 5; row++){
-            for(int column = 0; column < columns-row; column++){
-                double x_pom = rectangleWidth*column + (width - rectangleWidth*(columns-row))/2;
-                double y_pom = height/2 - rectangleHeight/2 - rectangleHeight*row;
-                double y_sec = height/2 - rectangleHeight/2 + rectangleHeight*row;
-                int id_sec = column*10 + row;
+    beginResetModel();
+    datas.clear();
+    for(int row = 0; row < 5; row++){
+        for(int column = 0; column < columns-row; column++){
+            double x_pom = rectangleWidth*column + (width - rectangleWidth*(columns-row))/2;
+            double y_pom = height/2 - rectangleHeight/2 - rectangleHeight*row;
+            double y_sec = height/2 - rectangleHeight/2 + rectangleHeight*row;
+            int id_sec = column*10 + row;
 
-                QSharedPointer<Field> f = getField(id_sec, pomDatas);
-                datas.append(QSharedPointer<Field>(new Field(id_sec, rectangleWidth, rectangleHeight, x_pom, y_sec, f->player, f->arrow)));
+            QSharedPointer<Field> f = getField(id_sec, pomDatas);
+            auto ff = new Field(id_sec, rectangleWidth, rectangleHeight, x_pom, y_sec, f->player, f->arrow);
+            auto x = QSharedPointer<Field>(ff);
+            datas.append(x);
 
-                int id_pom = id_sec+row*10 - 2*row;
-                if(row != 0){
-                    QSharedPointer<Field> f = getField(id_pom, pomDatas);
-                    datas.append(QSharedPointer<Field>(new Field(id_pom, rectangleWidth, rectangleHeight, x_pom, y_pom, f->player, f->arrow)));
-                }
+            int id_pom = id_sec+row*10 - 2*row;
+            if(row != 0){
+                QSharedPointer<Field> f = getField(id_pom, pomDatas);
+                datas.append(QSharedPointer<Field>(new Field(id_pom, rectangleWidth, rectangleHeight, x_pom, y_pom, f->player, f->arrow)));
             }
         }
+    }
     endResetModel();
 }
 void BoardModel::movement(double x, double y, int box){
@@ -119,14 +125,47 @@ void BoardModel::movement(double x, double y, int box){
         emit checkIsStartGame();
     }
 
-    computerMovement();
+    //computerMovement();
+
 }
+
 void BoardModel::computerMovement(){
 
-//    cout << "XDD" << endl;
+
     Board b = Board(datas);
-    Algorithm a = Algorithm(b.fields, 2);
-    a.getTheBestMovement();
+    auto a = QSharedPointer<Algorithm>(new Algorithm(b.fields, 2, 3));
+    array<int, 2> result = a->getTheBestMovement();
+
+    QSharedPointer<Field> field = getField(result[0]);
+    int next_field_id = result[0] + result[1];
+    int field_player = field->player;
+    cout << "field id=" << result[0] << " dir=" << result[1] << endl;
+
+    beginResetModel();
+
+    while(existsID(next_field_id)){
+         QSharedPointer<Field> next_field = getField(next_field_id);
+
+         int next_player = next_field->player;
+         next_field->player = field_player;
+
+         if(next_field_id == result[0] + result[1]) // from_field.player == 0
+            field->player = 0;
+
+         if(next_player == 0) // if field.player == 0
+             break;
+
+         // preparing for next loop
+         field = next_field;
+         field_player = next_player;
+         next_field_id += result[1];
+
+    }
+
+    endResetModel();
+    cout << "YYYY" <<endl;
+    checkPlayersMarbles();
+    changePlayer();
 
 }
 

@@ -46,7 +46,7 @@ Rectangle{
                 Text{
                     anchors.centerIn: parent
                     bottomPadding: height * 0.15
-                    text: arrow === -1 ? "" : ">"
+                    text: arrow === -1 ? id_role: ">" //////////// ""
                     color: player === 1 ? "#363237" :  "white"
                     font.weight: Font.DemiBold
                     fontSizeMode: Text.Fit

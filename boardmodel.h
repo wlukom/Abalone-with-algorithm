@@ -49,6 +49,7 @@ class BoardModel : public QAbstractListModel
     Q_INVOKABLE void updateSizeBoard(double width, double height);
     Q_INVOKABLE void predictMovement(int fieldID, double x, double y, int box);
     Q_INVOKABLE void movement(double x, double y, int box);
+    Q_INVOKABLE void computerMovement();
     virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
     virtual QVariant data(const QModelIndex &index, int role) const;
     QHash<int, QByteArray> roleNames() const;
@@ -82,7 +83,7 @@ class BoardModel : public QAbstractListModel
    void resetArrows();
    void setStartPosition();
 
-   void computerMovement();
+
 
    QMap<int, fieldDirections> partDirections;
    QMap<int, pair<int,int>> directionsFromCorners;
